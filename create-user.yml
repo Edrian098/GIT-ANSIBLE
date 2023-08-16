@@ -1,0 +1,22 @@
+---
+- name: create sudoers users based on request
+  hosts: all
+  become: true
+
+  vars_prompt:
+   - name: user_name
+     prompt: "Enter username"
+     private: false
+   - name: user_password
+     prompt: "Enter a new password"
+     private: yes
+  tasks:
+   - name: create users based on a list
+     user:
+       name: "{{ user_name }}"
+       password: "{{ user_password | password_hash('sha512') }}"
+       shell: /bin/bash
+   - name: create sudoers file for user
+     copy:
+       content: '{{ user_name }} ALL = (ALL) ALL'
+       dest: "/etc/sudoers.d/{{ user_name }}"
