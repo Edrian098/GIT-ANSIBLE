@@ -1,6 +1,6 @@
 ---
 - name: create sudoers users based on request
-  hosts: all
+  hosts: localhost
   become: true
 
   vars_prompt:
